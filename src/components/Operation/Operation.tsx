@@ -38,6 +38,7 @@ export class Operation extends React.Component<OperationProps> {
     const { operation } = this.props;
 
     const { name: summary, description, deprecated, externalDocs, isWebhook } = operation;
+    console.log(operation)
     const hasDescription = !!(description || externalDocs);
 
     return (
