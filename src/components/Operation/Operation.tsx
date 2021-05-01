@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react';
 import * as React from 'react';
 
-import { Badge, DarkRightPanel, H2, MiddlePanel, Row } from '../../common-elements';
+import { Badge, DarkRightPanel, H2, MiddlePanel, Row, TraitBadge } from '../../common-elements';
 import { ShareLink } from '../../common-elements/linkify';
 import { OperationModel } from '../../services/models';
 import styled from '../../styled-components';
@@ -37,9 +37,8 @@ export class Operation extends React.Component<OperationProps> {
   render() {
     const { operation } = this.props;
 
-    const { name: summary, description, deprecated, externalDocs, isWebhook } = operation;
+    const { name: summary, description, deprecated, externalDocs, isWebhook, badges } = operation;
     const hasDescription = !!(description || externalDocs);
-
     return (
       <OptionsContext.Consumer>
         {(options) => (
@@ -49,6 +48,7 @@ export class Operation extends React.Component<OperationProps> {
                 <ShareLink to={operation.id} />
                 {summary} {deprecated && <Badge type="warning"> Deprecated </Badge>}
                 {isWebhook && <Badge type="primary"> Webhook </Badge>}
+                {badges.map(badge => !badge.disableBadge && <TraitBadge key={badge.name + name} textColor={badge.textColor} backgroundColor={badge.backgroundColor} text={badge.name}/> )}
               </H2>
               {options.pathInMiddlePanel && !isWebhook && (
                 <Endpoint operation={operation} inverted={true} />
@@ -56,6 +56,7 @@ export class Operation extends React.Component<OperationProps> {
               {hasDescription && (
                 <Description>
                   {description !== undefined && <Markdown source={description} />}
+                  {badges.map(badge => <Markdown source={badge.description} />)}
                   {externalDocs && <ExternalDocumentation externalDocs={externalDocs} />}
                 </Description>
               )}

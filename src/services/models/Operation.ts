@@ -51,6 +51,14 @@ export class OperationModel implements IMenuItem {
   name: string;
   description?: string;
   type = 'operation' as const;
+  badges: Array<{
+    disableBadge: boolean,
+    name: string,
+    description: string,
+    type: string,
+    textColor: string,
+    backgroundColor: string,
+  }>;
 
   parent?: GroupModel;
   externalDocs?: OpenAPIExternalDocumentation;
@@ -85,9 +93,8 @@ export class OperationModel implements IMenuItem {
     isCallback: boolean = false,
   ) {
     makeObservable(this);
-
     this.pointer = operationSpec.pointer;
-
+    this.badges = operationSpec.badges;
     this.description = operationSpec.description;
     this.parent = parent;
     this.externalDocs = operationSpec.externalDocs;

@@ -28,9 +28,11 @@ export class MenuItems extends React.Component<MenuItemsProps> {
         expanded={expanded}
         {...(root ? { role: 'navigation' } : {})}
       >
-        {items.map((item, idx) => (
-          <MenuItem key={idx} item={item} onActivate={this.props.onActivate} />
-        ))}
+        {items.map((item, idx) => {
+          return (
+            <MenuItem key={idx} item={item} onActivate={this.props.onActivate} />
+          )
+        })}
       </MenuItemUl>
     );
   }

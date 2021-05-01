@@ -1,16 +1,16 @@
 {
-  "name": "redoc",
-  "version": "2.0.0-rc.53",
+  "name": "jak-redoc",
+  "version": "2.1.0-rc.27",
   "description": "ReDoc",
   "repository": {
     "type": "git",
-    "url": "git://github.com/Redocly/redoc"
+    "url": "git://github.com/jacobkring/redoc.git"
   },
   "engines": {
     "node": ">=6.9",
     "npm": ">=3.0.0"
   },
-  "author": "Roman Hotsiy <gotsijroman@gmail.com>",
+  "author": "Jake Kring <jake.kring.71@gmail.com>",
   "license": "MIT",
   "keywords": [
     "OpenAPI",
@@ -116,7 +116,7 @@
     "ts-jest": "^26.1.3",
     "ts-loader": "^8.0.1",
     "ts-node": "^8.10.2",
-    "typescript": "^3.9.7",
+    "typescript": "^3.9.9",
     "unfetch": "^4.1.0",
     "url-polyfill": "^1.1.10",
     "webpack": "^4.44.0",
@@ -195,5 +195,13 @@
     "trailingComma": "all",
     "printWidth": 100,
     "parser": "typescript"
+  },
+  "bugs": {
+    "url": "https://github.com/jacobkring/redoc/issues"
+  },
+  "homepage": "https://github.com/jacobkring/redoc#readme",
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
   }
 }

@@ -27,6 +27,14 @@ export type ExtendedOpenAPIOperation = {
   pointer: string;
   pathName: string;
   httpVerb: string;
+  badges: Array<{
+    disableBadge: boolean,
+    name: string,
+    description: string,
+    type: string,
+    textColor: string,
+    backgroundColor: string,
+  }>;
   pathParameters: Array<Referenced<OpenAPIParameter>>;
   pathServers: Array<OpenAPIServer> | undefined;
   isWebhook: boolean;
@@ -232,11 +240,31 @@ export class MenuBuilder {
         const operations = Object.keys(path).filter(isOperationName);
         for (const operationName of operations) {
           const operationInfo = path[operationName];
+
+          // init empty badges for x-traitTag
+          operationInfo["badges"] = []
+
           let operationTags = operationInfo.tags;
 
           if (!operationTags || !operationTags.length) {
             // empty tag
             operationTags = [''];
+          }
+
+          for (const tagName of operationTags) {
+            const tag = tags[tagName];
+            if (tag && tag['x-traitTag']) {
+              // add x-traitTag badges
+              operationInfo["badges"].push({
+                disableBadge: tag['x-traitTag']["disableBadge"],
+                name: tag['name'],
+                description: tag["description"],
+                type: "primary",
+                textColor: tag['x-traitTag']["textColor"],
+                backgroundColor: tag['x-traitTag']["backgroundColor"]
+              })
+              paths[pathName][operationName] = operationInfo
+            }
           }
 
           for (const tagName of operationTags) {
@@ -264,6 +292,13 @@ export class MenuBuilder {
         }
       }
     }
-    return tags;
+
+    const filteredTags: TagsInfoMap = {};
+    for (const name in tags) {
+      if (!tags[name]["x-traitTag"]) {
+        filteredTags[name] = tags[name]
+      }
+    }
+    return filteredTags;
   }
 }
