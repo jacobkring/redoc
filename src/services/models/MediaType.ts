@@ -63,7 +63,6 @@ export class MediaTypeModel {
         if (this.schema.discriminatorProp && typeof sample === 'object' && sample) {
           sample[this.schema.discriminatorProp] = subSchema.title;
         }
-
         this.examples[subSchema.title] = new ExampleModel(
           parser,
           {
@@ -84,6 +83,22 @@ export class MediaTypeModel {
           info.encoding,
         ),
       };
+      if (this.schema.rawSchema && this.schema.rawSchema.additionalProperties) {
+        if (this.schema.rawSchema.additionalProperties["x-additionalPropertiesNameExample"] && this.examples.default.value) {
+          const old_examples = this.examples.default.value
+          const new_examples = {}
+          for (const key in old_examples) {
+            if (old_examples.hasOwnProperty(key)) {
+              let name = key
+              if (this.schema.rawSchema.additionalProperties["x-additionalPropertiesName"]) {
+                name = key.replace("property", this.schema.rawSchema.additionalProperties["x-additionalPropertiesName"]+"*")
+              }
+              new_examples[this.schema.rawSchema.additionalProperties["x-additionalPropertiesNameExample"] + "\" \"<" + name+">"] = old_examples[key]
+            }
+          }
+          this.examples.default.value = new_examples;
+        }
+      }
     }
   }
 }

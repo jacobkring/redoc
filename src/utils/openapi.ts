@@ -592,6 +592,7 @@ export function isRedocExtension(key: string): boolean {
     'x-tagGroups': true,
     'x-traitTag': true,
     'x-additionalPropertiesName': true,
+    'x-additionalPropertiesNameExample': true,
     'x-explicitMappingOnly': true,
   };
 

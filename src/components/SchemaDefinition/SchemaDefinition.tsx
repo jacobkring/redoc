@@ -48,7 +48,6 @@ export class SchemaDefinition extends React.PureComponent<ObjectDescriptionProps
         options,
       );
     }
-
     return this._mediaModel;
   }
 

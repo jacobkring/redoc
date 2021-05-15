@@ -51,6 +51,8 @@ export class SchemaModel {
   fields?: FieldModel[];
   items?: SchemaModel;
 
+  additionalPropertiesNameExample?: string;
+
   oneOf?: SchemaModel[];
   oneOfType: string;
   discriminatorProp: string;
