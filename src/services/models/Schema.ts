@@ -25,7 +25,7 @@ import { l } from '../Labels';
 export class SchemaModel {
   pointer: string;
 
-  type: string;
+  type: string | string[];
   displayType: string;
   typePrefix: string = '';
   title: string;
@@ -60,6 +60,7 @@ export class SchemaModel {
   rawSchema: OpenAPISchema;
   schema: MergedOpenAPISchema;
   extensions?: Record<string, any>;
+  const: any;
 
   /**
    * @param isChild if schema discriminator Child
@@ -75,7 +76,7 @@ export class SchemaModel {
     makeObservable(this);
 
     this.pointer = schemaOrRef.$ref || pointer || '';
-    this.rawSchema = parser.deref(schemaOrRef);
+    this.rawSchema = parser.deref(schemaOrRef, false, true);
     this.schema = parser.mergeAllOf(this.rawSchema, this.pointer, isChild);
 
     this.init(parser, isChild);
@@ -106,7 +107,6 @@ export class SchemaModel {
     this.description = schema.description || '';
     this.type = schema.type || detectType(schema);
     this.format = schema.format;
-    this.nullable = !!schema.nullable;
     this.enum = schema.enum || [];
     this.example = schema.example;
     this.deprecated = !!schema.deprecated;
@@ -114,12 +114,22 @@ export class SchemaModel {
     this.externalDocs = schema.externalDocs;
 
     this.constraints = humanizeConstraints(schema);
-    this.displayType = this.type;
     this.displayFormat = this.format;
     this.isPrimitive = isPrimitiveType(schema, this.type);
     this.default = schema.default;
     this.readOnly = !!schema.readOnly;
     this.writeOnly = !!schema.writeOnly;
+    this.const = schema.const || '';
+
+    if (!!schema.nullable) {
+      if (Array.isArray(this.type) && !this.type.includes('null')) {
+        this.type = [...this.type, 'null'];
+      }
+    }
+
+    this.displayType = Array.isArray(this.type)
+      ? this.type.map(item => item === null ? 'null' : item).join(' or ')
+      : this.type;
 
     if (this.isCircular) {
       return;
@@ -156,7 +166,7 @@ export class SchemaModel {
 
     if (this.type === 'object') {
       this.fields = buildFields(parser, schema, this.pointer, this.options);
-    } else if (this.type === 'array' && schema.items) {
+    } else if ((this.type === 'array' || Array.isArray(this.type)) && schema.items) {
       this.items = new SchemaModel(parser, schema.items, this.pointer + '/items', this.options);
       this.displayType = pluralizeType(this.items.displayType);
       this.displayFormat = this.items.format;
@@ -169,6 +179,11 @@ export class SchemaModel {
       if (this.items.isPrimitive) {
         this.enum = this.items.enum;
       }
+      if (Array.isArray(this.type)) {
+        const filteredType = this.type.filter(item => item !== 'array');
+        if (filteredType.length)
+          this.displayType += ` or ${filteredType.join(' or ')}`;
+      }
     }
 
     if (this.enum.length && this.options.sortEnumValuesAlphabetically) {
@@ -178,7 +193,7 @@ export class SchemaModel {
 
   private initOneOf(oneOf: OpenAPISchema[], parser: OpenAPIParser) {
     this.oneOf = oneOf!.map((variant, idx) => {
-      const derefVariant = parser.deref(variant);
+      const derefVariant = parser.deref(variant, false, true);
 
       const merged = parser.mergeAllOf(derefVariant, this.pointer + '/oneOf/' + idx);
 
@@ -186,7 +201,7 @@ export class SchemaModel {
       const title =
         isNamedDefinition(variant.$ref) && !merged.title
           ? JsonPointer.baseName(variant.$ref)
-          : merged.title;
+          : `${(merged.title || '')}${(merged.const && JSON.stringify(merged.const)) || ''}`;
 
       const schema = new SchemaModel(
         parser,
