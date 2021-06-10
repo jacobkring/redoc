@@ -47,7 +47,6 @@ export class RoleRequirement extends React.PureComponent<RoleRequirementProps> {
     return (
       <div>
         {role.schemes.map(({ id, roles, sectionId }) => {
-          console.log(id, roles, sectionId)
           return (
             <RoleRequirementAndWrap key={id}>
               <Link to={sectionId}>{id}</Link>

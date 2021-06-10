@@ -68,7 +68,6 @@ export class SecurityRequirement extends React.PureComponent<SecurityRequirement
     return (
       <SecurityRequirementOrWrap>
         {security.schemes.map(scheme => {
-          console.log(scheme)
           return (
             <SecurityRequirementAndWrap key={scheme.id}>
               <Link to={scheme.sectionId}>{scheme.id}</Link>

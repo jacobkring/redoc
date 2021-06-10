@@ -40,7 +40,6 @@ export function Link(props: { to: string; className?: string; children?: any }) 
   const store = React.useContext(StoreContext);
   const clickHandler = React.useCallback(
     (event) => {
-      console.log(event)
       if (!store) return;
       navigate(store.menu.history, event);
     },
@@ -48,7 +47,6 @@ export function Link(props: { to: string; className?: string; children?: any }) 
   );
 
   if (!store) return null;
-  console.log(props)
   return (
     <a
       className={props.className}
@@ -68,7 +66,6 @@ function navigate(history: HistoryService, event) {
     !isModifiedEvent(event) // ignore clicks with modifier keys
   ) {
     event.preventDefault();
-    console.log(this)
     history.replace(this.props.to);
   }
 }
