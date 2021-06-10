@@ -17,6 +17,8 @@ import { RequestSamples } from '../RequestSamples/RequestSamples';
 import { ResponsesList } from '../Responses/ResponsesList';
 import { ResponseSamples } from '../ResponseSamples/ResponseSamples';
 import { SecurityRequirements } from '../SecurityRequirement/SecurityRequirement';
+import { RoleRequirements } from '../RoleRequirement/RoleRequirement';
+
 import { SECTION_ATTR } from '../../services';
 
 const Description = styled.div`
@@ -57,6 +59,7 @@ export const Operation = observer(({ operation }: OperationProps): JSX.Element =
             )}
             <Extensions extensions={operation.extensions} />
             <SecurityRequirements securities={operation.security} />
+            <RoleRequirements roles={operation.roles} />
             <Parameters parameters={operation.parameters} body={operation.requestBody} />
             <ResponsesList responses={operation.responses} />
             <CallbacksList callbacks={operation.callbacks} />

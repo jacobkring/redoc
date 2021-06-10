@@ -25,6 +25,7 @@ import type { OpenAPIParser } from '../OpenAPIParser';
 import type { RedocNormalizedOptions } from '../RedocNormalizedOptions';
 import type { MediaContentModel } from './MediaContent';
 import type { ContentItemModel, ExtendedOpenAPIOperation, IMenuItem } from '../types';
+import { RoleRequirementModel } from './RoleRequirement';
 
 export interface XPayloadSample {
   lang: 'payload';
@@ -79,6 +80,7 @@ export class OperationModel implements IMenuItem {
   isCallback: boolean;
   isWebhook: boolean;
   isEvent: boolean;
+  roles: RoleRequirementModel[];
 
   constructor(
     private parser: OpenAPIParser,
@@ -134,6 +136,12 @@ export class OperationModel implements IMenuItem {
       this.security = (operationSpec.security || parser.spec.security || []).map(
         security => new SecurityRequirementModel(security, parser),
       );
+
+      this.roles = (operationSpec['x-roles'] || parser.spec['x-roles'] || []).map(
+        (role) => {
+          return new RoleRequirementModel(role, parser)
+        },
+      )
 
       this.servers = normalizeServers(
         parser.specUrl,
