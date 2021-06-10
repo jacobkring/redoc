@@ -40,7 +40,13 @@ info:
 
     <SecurityDefinitions />
 
-  version: 1.0.0
+    # Role Based Access Control
+
+    ## Global
+
+    ## Project
+
+  version: 3.0.1
   title: Swagger Petstore
   summary: My lovely API
   termsOfService: 'http://swagger.io/terms/'
@@ -1194,6 +1200,11 @@ components:
               $ref: '#/components/schemas/User'
       description: List of user object
       required: true
+  x-permissionSchemes:
+    Global:
+      type: role
+    Project:
+      type: role
   securitySchemes:
     petstore_auth:
       description: |

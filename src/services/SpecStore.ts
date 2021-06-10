@@ -4,6 +4,7 @@ import { ContentItemModel, MenuBuilder } from './MenuBuilder';
 import { ApiInfoModel } from './models/ApiInfo';
 import { WebhookModel } from './models/Webhook';
 import { SecuritySchemesModel } from './models/SecuritySchemes';
+import { PermissionSchemesModel } from './models/PermissionSchemes';
 import { OpenAPIParser } from './OpenAPIParser';
 import { RedocNormalizedOptions } from './RedocNormalizedOptions';
 /**
@@ -16,6 +17,7 @@ export class SpecStore {
   externalDocs?: OpenAPIExternalDocumentation;
   contentItems: ContentItemModel[];
   securitySchemes: SecuritySchemesModel;
+  permissionSchemes: PermissionSchemesModel;
   webhooks?: WebhookModel;
 
   constructor(

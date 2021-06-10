@@ -42,6 +42,7 @@ export function convertSwagger2OpenAPI(spec: any): Promise<OpenAPISpec> {
       if (err) {
         return reject(err);
       }
+
       resolve(res && (res.openapi as any));
     }),
   );

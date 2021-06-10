@@ -3,6 +3,7 @@ import { action, observable, makeObservable } from 'mobx';
 import { IMenuItem } from '../MenuStore';
 import { GroupModel } from './Group.model';
 import { SecurityRequirementModel } from './SecurityRequirement';
+import { RoleRequirementModel } from './RoleRequirement';
 
 import { OpenAPIExternalDocumentation, OpenAPIServer, OpenAPIXCodeSample } from '../../types';
 
@@ -76,6 +77,7 @@ export class OperationModel implements IMenuItem {
   extensions: Record<string, any>;
   isCallback: boolean;
   isWebhook: boolean;
+  roles: RoleRequirementModel[];
 
   constructor(
     private parser: OpenAPIParser,
@@ -122,6 +124,12 @@ export class OperationModel implements IMenuItem {
       this.security = (operationSpec.security || parser.spec.security || []).map(
         (security) => new SecurityRequirementModel(security, parser),
       );
+
+      this.roles = (operationSpec['x-roles'] || parser.spec['x-roles'] || []).map(
+        (role) => {
+          return new RoleRequirementModel(role, parser)
+        },
+      )
 
       this.servers = normalizeServers(
         parser.specUrl,

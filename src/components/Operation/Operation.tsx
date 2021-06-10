@@ -17,6 +17,7 @@ import { RequestSamples } from '../RequestSamples/RequestSamples';
 import { ResponsesList } from '../Responses/ResponsesList';
 import { ResponseSamples } from '../ResponseSamples/ResponseSamples';
 import { SecurityRequirements } from '../SecurityRequirement/SecurityRequirement';
+import { RoleRequirements } from '../RoleRequirement/RoleRequirement';
 
 const OperationRow = styled(Row)`
   backface-visibility: hidden;
@@ -38,7 +39,6 @@ export class Operation extends React.Component<OperationProps> {
     const { operation } = this.props;
 
     const { name: summary, description, deprecated, externalDocs, isWebhook } = operation;
-    console.log(operation)
     const hasDescription = !!(description || externalDocs);
 
     return (
@@ -62,6 +62,7 @@ export class Operation extends React.Component<OperationProps> {
               )}
               <Extensions extensions={operation.extensions} />
               <SecurityRequirements securities={operation.security} />
+              <RoleRequirements roles={operation.roles} />
               <Parameters parameters={operation.parameters} body={operation.requestBody} />
               <ResponsesList responses={operation.responses} />
               <CallbacksList callbacks={operation.callbacks} />

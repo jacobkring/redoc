@@ -1,6 +1,7 @@
 import { Omit } from './index';
 
 export interface OpenAPISpec {
+  'x-roles': RoleRequirement[];
   openapi: string;
   info: OpenAPIInfo;
   servers?: OpenAPIServer[];
@@ -10,6 +11,7 @@ export interface OpenAPISpec {
   tags?: OpenAPITag[];
   externalDocs?: OpenAPIExternalDocumentation;
   'x-webhooks'?: OpenAPIPaths;
+  'x-permissionSchemes'?:ExtendedRoleScheme;
   webhooks?: OpenAPIPaths;
 }
 
@@ -67,6 +69,12 @@ export interface OpenAPIXCodeSample {
   source: string;
 }
 
+export interface OpenAPIXRole {
+  lang: string;
+  label?: string;
+  source: string;
+}
+
 export interface OpenAPIOperation {
   tags?: string[];
   summary?: string;
@@ -82,6 +90,7 @@ export interface OpenAPIOperation {
   servers?: OpenAPIServer[];
   'x-codeSamples'?: OpenAPIXCodeSample[];
   'x-code-samples'?: OpenAPIXCodeSample[]; // deprecated
+  'x-roles'?: RoleRequirement[];
 }
 
 export interface OpenAPIParameter {
@@ -223,6 +232,10 @@ export interface OpenAPISecurityRequirement {
   [name: string]: string[];
 }
 
+export interface RoleRequirement {
+  [name: string]: string[];
+}
+
 export interface OpenAPISecurityScheme {
   type: 'apiKey' | 'http' | 'oauth2' | 'openIdConnect';
   description?: string;
@@ -253,6 +266,15 @@ export interface OpenAPISecurityScheme {
     };
   };
   openIdConnectUrl?: string;
+}
+
+export interface ExtendedRoleScheme {
+  type: 'role' ;
+  description?: string;
+  name?: string;
+  roles: string[];
+  id: string;
+  sectionId: string;
 }
 
 export interface OpenAPITag {
