@@ -156,6 +156,8 @@ export interface OpenAPISchema {
   enum?: any[];
   example?: any;
   const?: string;
+  contentEncoding?: string;
+  contentMediaType?: string;
 }
 
 export interface OpenAPIDiscriminator {
