@@ -78,6 +78,7 @@ export class OperationModel implements IMenuItem {
   isCallback: boolean;
   isWebhook: boolean;
   roles: RoleRequirementModel[];
+  isEvent: boolean;
 
   constructor(
     private parser: OpenAPIParser,
@@ -100,7 +101,8 @@ export class OperationModel implements IMenuItem {
     this.operationId = operationSpec.operationId;
     this.path = operationSpec.pathName;
     this.isCallback = isCallback;
-    this.isWebhook = !!operationSpec.isWebhook;
+    this.isWebhook = operationSpec.isWebhook;
+    this.isEvent = this.isCallback || this.isWebhook;
 
     this.name = getOperationSummary(operationSpec);
 
@@ -179,8 +181,12 @@ export class OperationModel implements IMenuItem {
   @memoize
   get requestBody() {
     return (
-      this.operationSpec.requestBody &&
-      new RequestBodyModel(this.parser, this.operationSpec.requestBody, this.options)
+      this.operationSpec.requestBody && new RequestBodyModel({
+        parser: this.parser,
+        infoOrRef: this.operationSpec.requestBody,
+        options: this.options,
+        isEvent: this.isEvent,
+      })
     );
   }
 
@@ -248,13 +254,14 @@ export class OperationModel implements IMenuItem {
         return isStatusCode(code);
       }) // filter out other props (e.g. x-props)
       .map((code) => {
-        return new ResponseModel(
-          this.parser,
+        return new ResponseModel({
+          parser: this.parser,
           code,
-          hasSuccessResponses,
-          this.operationSpec.responses[code],
-          this.options,
-        );
+          defaultAsError: hasSuccessResponses,
+          infoOrRef: this.operationSpec.responses[code],
+          options: this.options,
+          isEvent: this.isEvent,
+        });
       });
   }
 
