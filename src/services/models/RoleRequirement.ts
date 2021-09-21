@@ -8,9 +8,11 @@ export class RoleRequirementModel {
 
   constructor(requirement: OpenAPISecurityRequirement, parser: OpenAPIParser) {
     const schemes = (parser.spec.components && parser.spec.components['x-permissionSchemes']) || {};
+    console.log(schemes)
     this.schemes = Object.keys(requirement || {})
       .map(id => {
         const scheme = parser.deref(schemes[id]);
+        console.log(id, scheme)
         const roles = requirement[id] || [];
 
         if (!scheme) {
