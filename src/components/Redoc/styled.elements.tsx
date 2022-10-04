@@ -29,7 +29,6 @@ export const ApiContentWrap = styled.div`
   z-index: 1;
   position: relative;
   overflow: hidden;
-  height: 100%;
   width: calc(100% - ${props => props.theme.sidebar.width});
   ${media.lessThan('small', true)`
     width: 100%;
@@ -41,7 +40,6 @@ export const ApiContentWrap = styled.div`
 export const BackgroundStub = styled.div`
   background: ${({ theme }) => theme.rightPanel.backgroundColor};
   position: absolute;
-  height: 100%;
   top: 0;
   bottom: 0;
   right: 0;
