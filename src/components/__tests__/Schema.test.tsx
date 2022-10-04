@@ -12,7 +12,7 @@ const options = new RedocNormalizedOptions({});
 describe('Components', () => {
   describe('SchemaView', () => {
     const parser = new OpenAPIParser(
-      { openapi: '3.0', info: { title: 'test', version: '0' }, paths: {} },
+      { openapi: '3.0', info: { title: 'test', version: '0' }, paths: {}, 'x-roles': [] },
       undefined,
       options,
     );

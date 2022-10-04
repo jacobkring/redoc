@@ -1,4 +1,5 @@
-import { ExtendedRoleScheme, Referenced } from '../../types';
+import { Referenced } from '../../types';
+import { ExtendedRoleScheme } from '../../types/open-api';
 import { PERMISSION_SCHEMES_SECTION_PREFIX } from '../../utils/openapi';
 import { OpenAPIParser } from '../OpenAPIParser';
 
@@ -8,12 +9,11 @@ export class PermissionSchemeModel {
   type: ExtendedRoleScheme['type'];
   roles?: string[];
 
-
   constructor(parser: OpenAPIParser, id: string, scheme: Referenced<ExtendedRoleScheme>) {
     const info = parser.deref(scheme);
     this.id = id;
     this.sectionId = PERMISSION_SCHEMES_SECTION_PREFIX + id;
-    this.type = info.type;
+    this.type = info.type || 'role';
     this.roles = info.roles;
   }
 }

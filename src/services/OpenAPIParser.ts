@@ -88,7 +88,12 @@ export class OpenAPIParser {
     obj: OpenAPIRef | T,
     baseRefsStack: string[] = [],
     mergeAsAllOf = false,
-  ): { resolved: T; refsStack: string[] } {
+  ): {
+    roles?: string[];
+    type?: 'role';
+    resolved: T;
+    refsStack: string[];
+  } {
     // this can be set by all of when it mergers props from different sources
     const objRefsStack = obj?.['x-refsStack'];
     baseRefsStack = concatRefStacks(baseRefsStack, objRefsStack);

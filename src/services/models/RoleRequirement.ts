@@ -2,18 +2,14 @@ import { OpenAPISecurityRequirement, ExtendedRoleScheme } from '../../types';
 import { PERMISSION_SCHEMES_SECTION_PREFIX } from '../../utils/openapi';
 import { OpenAPIParser } from '../OpenAPIParser';
 
-
 export class RoleRequirementModel {
   schemes: ExtendedRoleScheme[];
 
   constructor(requirement: OpenAPISecurityRequirement, parser: OpenAPIParser) {
     const schemes = (parser.spec.components && parser.spec.components['x-permissionSchemes']) || {};
-    console.warn("WHAT", schemes)
-    console.log(schemes)
     this.schemes = Object.keys(requirement || {})
       .map(id => {
         const scheme = parser.deref(schemes[id]);
-        console.log(id, scheme)
         const roles = requirement[id] || [];
 
         if (!scheme) {

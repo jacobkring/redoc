@@ -54,7 +54,7 @@ describe('SecurityRequirement', () => {
   it("should render 'None' when empty object in security open api", () => {
     const options = new RedocNormalizedOptions({});
     const parser = new OpenAPIParser(
-      { openapi: '3.0', info: { title: 'test', version: '0' }, paths: {} },
+      { openapi: '3.0', info: { title: 'test', version: '0' }, paths: {}, 'x-roles': [] },
       undefined,
       options,
     );
