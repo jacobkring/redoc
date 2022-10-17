@@ -13,6 +13,7 @@ describe('Components', () => {
   describe('SchemaDefinition', () => {
     const parser = new OpenAPIParser(
       {
+        'x-roles': [],
         openapi: '3.0',
         info: {
           title: 'test',
